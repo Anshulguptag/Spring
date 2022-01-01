@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 @Service
 public class PostServiceImpl implements PostService {
 
-    private PostRepository postRepository;
+    private final PostRepository postRepository;
 
     public PostServiceImpl(PostRepository postRepository){
         this.postRepository = postRepository;
@@ -31,9 +31,7 @@ public class PostServiceImpl implements PostService {
         Post newPost = postRepository.save(post);
 
         //Convert entity to DTO
-        PostDto postResponse = mapToDto(newPost);
-
-        return postResponse;
+        return mapToDto(newPost);
     }
 
     @Override
@@ -50,7 +48,7 @@ public class PostServiceImpl implements PostService {
         // get content of page object
         List<Post> listOfPosts = posts.getContent();
 
-        List<PostDto> content =  listOfPosts.stream().map(post -> mapToDto(post)).collect(Collectors.toList());
+        List<PostDto> content =  listOfPosts.stream().map(this::mapToDto).collect(Collectors.toList());
 
         PostResponse postResponse = new PostResponse();
         postResponse.setContent(content);
