@@ -2,6 +2,9 @@ package com.springboot.blog.springbootblogrestapi.payload;
 
 import lombok.Data;
 
+/**
+ * The type Comment dto.
+ */
 @Data
 public class CommentDto {
     private long id;

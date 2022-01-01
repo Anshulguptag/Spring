@@ -6,6 +6,9 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+/**
+ * The type Post response.
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

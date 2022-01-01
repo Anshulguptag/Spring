@@ -14,12 +14,21 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * The type Comment service.
+ */
 @Service
 public class CommentServiceImpl implements CommentService {
 
     private final CommentRespository commentRespository;
     private final PostRepository postRepository;
 
+    /**
+     * Instantiates a new Comment service.
+     *
+     * @param commentRespository the comment respository
+     * @param postRepository     the post repository
+     */
     public CommentServiceImpl(CommentRespository commentRespository, PostRepository postRepository) {
         this.commentRespository = commentRespository;
         this.postRepository = postRepository;
@@ -59,6 +68,28 @@ public class CommentServiceImpl implements CommentService {
             throw new BlogApiException(HttpStatus.BAD_REQUEST, "Comment not belong to the post :(");
         }
         return mapToDTO(comment);
+    }
+
+    @Override
+    public CommentDto updateCommentById(long postId, long commentId, CommentDto commentDto) {
+
+        Post post = postRepository.findById(postId).orElseThrow(
+                () -> new ResourceNotFound("Post", "id", postId)
+        );
+
+        Comment comment = commentRespository.findById(commentId).orElseThrow(
+                () -> new ResourceNotFound("Comment", "id", commentId));
+
+        if (!Long.valueOf(comment.getPost().getId()).equals(post.getId()))
+            throw new BlogApiException(HttpStatus.BAD_REQUEST, "Comment not belong to this post");
+
+        comment.setName(commentDto.getName());
+        comment.setEmail(commentDto.getEmail());
+        comment.setBody(commentDto.getBody());
+
+        Comment updatedComment = commentRespository.save(comment);
+
+        return mapToDTO(updatedComment);
     }
 
     private CommentDto mapToDTO(Comment comment) {

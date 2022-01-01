@@ -15,12 +15,20 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * The type Post service.
+ */
 @Service
 public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
 
-    public PostServiceImpl(PostRepository postRepository){
+    /**
+     * Instantiates a new Post service.
+     *
+     * @param postRepository the post repository
+     */
+    public PostServiceImpl(PostRepository postRepository) {
         this.postRepository = postRepository;
     }
 
@@ -37,8 +45,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public PostResponse getAllPosts(int pageNo, int pageSize, String sortBy, String sortDir) {
 
-        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending() :
-                Sort.by(sortBy).descending();
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
 
         // create Pagable instance
         Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
@@ -48,7 +55,7 @@ public class PostServiceImpl implements PostService {
         // get content of page object
         List<Post> listOfPosts = posts.getContent();
 
-        List<PostDto> content =  listOfPosts.stream().map(this::mapToDto).collect(Collectors.toList());
+        List<PostDto> content = listOfPosts.stream().map(this::mapToDto).collect(Collectors.toList());
 
         PostResponse postResponse = new PostResponse();
         postResponse.setContent(content);
@@ -81,11 +88,11 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public void deleteById(long id) {
-        Post post = postRepository.findById(id).orElseThrow(()-> new ResourceNotFound("Post","id", id));
+        Post post = postRepository.findById(id).orElseThrow(() -> new ResourceNotFound("Post", "id", id));
         postRepository.delete(post);
     }
 
-    private PostDto mapToDto(Post post){
+    private PostDto mapToDto(Post post) {
         PostDto postDto = new PostDto();
         postDto.setId(post.getId());
         postDto.setTitle(post.getTitle());
@@ -95,7 +102,7 @@ public class PostServiceImpl implements PostService {
         return postDto;
     }
 
-    private Post mapToEntity(PostDto postDto){
+    private Post mapToEntity(PostDto postDto) {
         Post post = new Post();
         post.setTitle(postDto.getTitle());
         post.setDescription(postDto.getDescription());

@@ -8,6 +8,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * The type Post controller.
+ */
 /*
 RestController is a Spring annotation that is used to build REST API in a declarative way.
 RestController annotation is applied to a class to mark it as a request handler, and
@@ -21,11 +24,22 @@ public class PostController {
 
     private final PostService postService;
 
+    /**
+     * Instantiates a new Post controller.
+     *
+     * @param postService the post service
+     */
     public PostController(PostService postService) {
         this.postService = postService;
     }
 
-    //create blog post
+    /**
+     * Create post response entity.
+     *
+     * @param postDto the post dto
+     * @return the response entity
+     */
+//create blog post
     @PostMapping
     /*
     ResponseEntity is an extension of HttpEntity that represents an
@@ -37,7 +51,16 @@ public class PostController {
         return new ResponseEntity<>(postService.createPost(postDto), HttpStatus.CREATED);
     }
 
-    // get all blog posts
+    /**
+     * Gets all posts.
+     *
+     * @param pageNo   the page no
+     * @param pageSize the page size
+     * @param sortBy   the sort by
+     * @param sortDir  the sort dir
+     * @return the all posts
+     */
+// get all blog posts
     @GetMapping
     public PostResponse getAllPosts(
             @RequestParam(value = "pageNo", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER, required = false) int pageNo,
@@ -48,12 +71,25 @@ public class PostController {
         return postService.getAllPosts(pageNo, pageSize, sortBy, sortDir);
     }
 
+    /**
+     * Gets post by id.
+     *
+     * @param id the id
+     * @return the post by id
+     */
     @GetMapping("/{id}")
     public ResponseEntity<PostDto> getPostById(@PathVariable(name = "id") long id) {
         return ResponseEntity.ok(postService.getPostById(id));
     }
 
-    // update post by id
+    /**
+     * Update post response entity.
+     *
+     * @param postDto the post dto
+     * @param id      the id
+     * @return the response entity
+     */
+// update post by id
     @PutMapping("/{id}")
     public ResponseEntity<PostDto> updatePost(@RequestBody PostDto postDto, @PathVariable(name = "id") long id) {
         PostDto postResponse = postService.updatePost(postDto, id);
@@ -61,6 +97,12 @@ public class PostController {
         return new ResponseEntity<>(postResponse, HttpStatus.OK);
     }
 
+    /**
+     * Delete post response entity.
+     *
+     * @param id the id
+     * @return the response entity
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deletePost(@PathVariable(name = "id") long id) {
         postService.deleteById(id);
