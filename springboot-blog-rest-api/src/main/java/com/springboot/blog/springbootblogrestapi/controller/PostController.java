@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 /**
  * The type Post controller.
  */
@@ -47,7 +49,7 @@ public class PostController {
     to modify the response with optional headers and status code.
     In spring applications, ResponseEntity is used in @Controller methods as well as in RestTemplate.
      */
-    public ResponseEntity<PostDto> createPost(@RequestBody PostDto postDto) {
+    public ResponseEntity<PostDto> createPost(@Valid @RequestBody PostDto postDto) {
         return new ResponseEntity<>(postService.createPost(postDto), HttpStatus.CREATED);
     }
 
@@ -89,9 +91,9 @@ public class PostController {
      * @param id      the id
      * @return the response entity
      */
-// update post by id
+    // update post by id
     @PutMapping("/{id}")
-    public ResponseEntity<PostDto> updatePost(@RequestBody PostDto postDto, @PathVariable(name = "id") long id) {
+    public ResponseEntity<PostDto> updatePost(@Valid @RequestBody PostDto postDto, @PathVariable(name = "id") long id) {
         PostDto postResponse = postService.updatePost(postDto, id);
 
         return new ResponseEntity<>(postResponse, HttpStatus.OK);
