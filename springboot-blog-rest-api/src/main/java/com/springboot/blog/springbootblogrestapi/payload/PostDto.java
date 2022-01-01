@@ -2,6 +2,8 @@ package com.springboot.blog.springbootblogrestapi.payload;
 
 import lombok.Data;
 
+import java.util.Set;
+
 /**
  * The type Post dto.
  */
@@ -11,4 +13,5 @@ public class PostDto {
     private String title;
     private String description;
     private String content;
+    private Set<CommentDto> comments;
 }
