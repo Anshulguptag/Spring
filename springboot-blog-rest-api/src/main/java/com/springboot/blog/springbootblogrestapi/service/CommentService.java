@@ -43,4 +43,12 @@ public interface CommentService {
      * @return the comment dto
      */
     CommentDto updateCommentById(long postId, long commentId, CommentDto commentDto);
+
+    /**
+     * Delete comment.
+     *
+     * @param postId    the post id
+     * @param commentId the comment id
+     */
+    void deleteComment(long postId, long commentId);
 }
