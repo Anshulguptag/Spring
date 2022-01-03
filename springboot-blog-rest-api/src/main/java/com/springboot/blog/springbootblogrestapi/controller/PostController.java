@@ -6,6 +6,7 @@ import com.springboot.blog.springbootblogrestapi.service.PostService;
 import com.springboot.blog.springbootblogrestapi.utils.AppConstants;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -41,7 +42,8 @@ public class PostController {
      * @param postDto the post dto
      * @return the response entity
      */
-//create blog post
+    //create blog post
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     /*
     ResponseEntity is an extension of HttpEntity that represents an
@@ -62,7 +64,7 @@ public class PostController {
      * @param sortDir  the sort dir
      * @return the all posts
      */
-// get all blog posts
+   // get all blog posts
     @GetMapping
     public PostResponse getAllPosts(
             @RequestParam(value = "pageNo", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER, required = false) int pageNo,
@@ -92,6 +94,7 @@ public class PostController {
      * @return the response entity
      */
     // update post by id
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<PostDto> updatePost(@Valid @RequestBody PostDto postDto, @PathVariable(name = "id") long id) {
         PostDto postResponse = postService.updatePost(postDto, id);
@@ -105,6 +108,7 @@ public class PostController {
      * @param id the id
      * @return the response entity
      */
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deletePost(@PathVariable(name = "id") long id) {
         postService.deleteById(id);
